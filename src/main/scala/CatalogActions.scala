@@ -40,7 +40,7 @@ object CatalogActions extends App {
     _ <- createObjectInObjectStoreLayer(hrn, objectStoreLayerId, partitionId, partitionFile)
     versionedData <- getDataFromLayerByLayerId(hrn, versionedLayerId, VersionedLayerType)
     volatileData <- getDataFromLayerByLayerId(hrn, volatileLayerId, VolatileLayerType())
-    //    indexData <- getDataFromIndexLayerByQuery(hrn, indexLayerId, queryString)
+    indexData <- getDataFromIndexLayerByQuery(hrn, indexLayerId, queryString)
     objectStoreData <- getDataFromObjectStoreLayerByKey(hrn, objectStoreLayerId, partitionId)
   } yield {
     versionedData.runWith {
@@ -49,9 +49,9 @@ object CatalogActions extends App {
     volatileData.runWith {
       Sink.foreach(println)
     }
-    //    indexData.runWith {
-    //      Sink.foreach(println)
-    //    }
+    indexData.runWith {
+      Sink.foreach(println)
+    }
     objectStoreData.runForeach {
       (byteData: ByteString) => println(byteData.utf8String)
     }
